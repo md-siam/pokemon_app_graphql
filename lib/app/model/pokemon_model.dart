@@ -2,46 +2,6 @@
 //
 //     final pokemonModel = pokemonModelFromJson(jsonString);
 
-import 'dart:convert';
-
-PokemonModel pokemonModelFromJson(String str) =>
-    PokemonModel.fromJson(json.decode(str));
-
-String pokemonModelToJson(PokemonModel data) => json.encode(data.toJson());
-
-class PokemonModel {
-  final Data data;
-
-  PokemonModel({
-    required this.data,
-  });
-
-  factory PokemonModel.fromJson(Map<String, dynamic> json) => PokemonModel(
-        data: Data.fromJson(json["data"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
-      };
-}
-
-class Data {
-  final List<Pokemon> pokemons;
-
-  Data({
-    required this.pokemons,
-  });
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        pokemons: List<Pokemon>.from(
-            json["pokemons"].map((x) => Pokemon.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "pokemons": List<dynamic>.from(pokemons.map((x) => x.toJson())),
-      };
-}
-
 class Pokemon {
   final String id;
   final String number;

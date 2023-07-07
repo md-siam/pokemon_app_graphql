@@ -1,17 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  final String title;
+  const HomePage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int limit = 40;
+  String queries = r'''
+          query pokemons($first: Int!){
+          pokemons(first: $first){
+            id
+            number
+            name
+            weight{
+              minimum
+              maximum
+            }
+            height{
+              minimum
+              maximum
+            }
+            classification
+            types
+            resistant
+            weaknesses
+            fleeRate
+            maxCP
+            maxHP
+            image
+          }
+        }
+        ''';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Pokémon')),
-      body: const Center(
+      appBar: AppBar(title: Text(widget.title)),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Pokémon Home Page'),
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Query(
+              options: QueryOptions(
+                document: gql(queries),
+                variables: <String, dynamic>{
+                  'first': limit,
+                  // set cursor to null so as to start at the beginning
+                  'cursor': null
+                },
+                //pollInterval: 10,
+              ),
+              builder: (QueryResult result, {refetch, FetchMore? fetchMore}) {
+                if (result.hasException) {
+                  return Text(result.exception.toString());
+                }
+
+                if (result.isLoading && result.data == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (result.data == null && !result.hasException) {
+                  return const Text('Exception');
+                }
+
+                // result.data can be either a [List<dynamic>] or a [Map<String, dynamic>]
+                final repositories =
+                    (result.data!['pokemons'] as List<dynamic>);
+
+                return Expanded(
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    children: <Widget>[
+                      for (var repository in repositories)
+                        Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                print("${repository['name']} pressed");
+                              },
+                              child: Card(
+                                child: ListTile(
+                                  leading: SizedBox(
+                                    width: 50,
+                                    child: Image.network(
+                                      repository['image'] as String,
+                                    ),
+                                  ),
+                                  title: Text(repository['name'] as String),
+                                  subtitle: Text(
+                                    repository['classification'] as String,
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                  trailing: Text(repository['number'] as String),
+                                ),
+                              ),
+                            ),
+                          const SizedBox(height: 8.0),
+                          ],
+                        ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            limit = limit + 20;
+                          });
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('Load More'),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

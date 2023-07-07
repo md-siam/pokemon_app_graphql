@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app/pages/home_page.dart';
+import 'app/widgets/fetch_more_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const FetchMoreWidget(),
     );
   }
 }
