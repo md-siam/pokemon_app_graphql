@@ -13,9 +13,14 @@ This application is a Pre-assessment for the Flutter Developer position. It's an
 
 This application is using one third-party package from the open-source community. Thanks to the developers of <a href = "https://pub.dev/packages/graphql_flutter">graphql_flutter: ^5.1.2 </a> for this amazing package. The purpose of using this package is to run GraphQL quartes in a flutter application.
 
-```
+```yaml
   graphql_flutter: ^5.1.2   //For using graphQL API
 ```
+
+<p align="center">
+    <a href="https://drive.google.com/file/d/1H71hQf91-4drG2sCt4YHXswn_lE6CRvd/view?usp=sharing" target="_blank"><img src="screenshots/download_apk/download.png" height="100" ></img></a>
+  </p>
+
 
 ## App Demo
 
