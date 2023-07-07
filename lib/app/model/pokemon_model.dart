@@ -4,17 +4,17 @@
 
 import 'dart:convert';
 
+PokemonModel pokemonModelFromJson(String str) =>
+    PokemonModel.fromJson(json.decode(str));
+
+String pokemonModelToJson(PokemonModel data) => json.encode(data.toJson());
+
 class PokemonModel {
   final Data data;
 
   PokemonModel({
     required this.data,
   });
-
-  factory PokemonModel.fromRawJson(String str) =>
-      PokemonModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
 
   factory PokemonModel.fromJson(Map<String, dynamic> json) => PokemonModel(
         data: Data.fromJson(json["data"]),
@@ -32,10 +32,6 @@ class Data {
     required this.pokemons,
   });
 
-  factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         pokemons: List<Pokemon>.from(
             json["pokemons"].map((x) => Pokemon.fromJson(x))),
@@ -50,6 +46,8 @@ class Pokemon {
   final String id;
   final String number;
   final String name;
+  final Anatomy weight;
+  final Anatomy height;
   final String classification;
   final List<String> types;
   final List<String> resistant;
@@ -63,6 +61,8 @@ class Pokemon {
     required this.id,
     required this.number,
     required this.name,
+    required this.weight,
+    required this.height,
     required this.classification,
     required this.types,
     required this.resistant,
@@ -73,14 +73,12 @@ class Pokemon {
     required this.image,
   });
 
-  factory Pokemon.fromRawJson(String str) => Pokemon.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Pokemon.fromJson(Map<String, dynamic> json) => Pokemon(
         id: json["id"],
         number: json["number"],
         name: json["name"],
+        weight: Anatomy.fromJson(json["weight"]),
+        height: Anatomy.fromJson(json["height"]),
         classification: json["classification"],
         types: List<String>.from(json["types"].map((x) => x)),
         resistant: List<String>.from(json["resistant"].map((x) => x)),
@@ -95,6 +93,8 @@ class Pokemon {
         "id": id,
         "number": number,
         "name": name,
+        "weight": weight.toJson(),
+        "height": height.toJson(),
         "classification": classification,
         "types": List<dynamic>.from(types.map((x) => x)),
         "resistant": List<dynamic>.from(resistant.map((x) => x)),
@@ -103,5 +103,25 @@ class Pokemon {
         "maxCP": maxCp,
         "maxHP": maxHp,
         "image": image,
+      };
+}
+
+class Anatomy {
+  final String minimum;
+  final String maximum;
+
+  Anatomy({
+    required this.minimum,
+    required this.maximum,
+  });
+
+  factory Anatomy.fromJson(Map<String, dynamic> json) => Anatomy(
+        minimum: json["minimum"],
+        maximum: json["maximum"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "minimum": minimum,
+        "maximum": maximum,
       };
 }
