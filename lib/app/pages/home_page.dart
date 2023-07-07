@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import '../graphql/queries.dart';
 import 'detail_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,31 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int limit = 40;
-  String queries = r'''
-          query pokemons($first: Int!){
-          pokemons(first: $first){
-            id
-            number
-            name
-            weight{
-              minimum
-              maximum
-            }
-            height{
-              minimum
-              maximum
-            }
-            classification
-            types
-            resistant
-            weaknesses
-            fleeRate
-            maxCP
-            maxHP
-            image
-          }
-        }
-        ''';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
