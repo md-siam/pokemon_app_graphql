@@ -19,7 +19,7 @@ This application is using one third-party package from the open-source community
 
 ## App Demo
 
-<p align="center"><img src="screenshots/gif/demo.gif"></p>
+<p align="center"><img src="screenshots/gif/app_demo.gif"></p>
 
 ## File Pattern Inside The `lib` Folder
 
